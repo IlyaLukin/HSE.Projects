@@ -129,11 +129,11 @@ namespace DLLibs
         public static double DoubleTest(string input)
         {
             var inputStr = input;
-            var isInt32Inserted = double.TryParse(inputStr, out var inputDigit);
-            if (isInt32Inserted) return inputDigit;
+            var isDoubleInserted = double.TryParse(inputStr, out var inputDigit);
+            if (isDoubleInserted) return inputDigit;
 
             throw new FormatException();
-        }
+         }
 
         #endregion
     }

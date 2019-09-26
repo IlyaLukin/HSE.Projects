@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLLibs", "DLLibs\DLLibs.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQAT.Tests", "SQAT.Tests\SQAT.Tests.csproj", "{8C52539B-A252-4323-BE1E-5B217D0B1FDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQAT.XP", "SQAT.XP\SQAT.XP.csproj", "{5E7B024C-E1D0-4902-B1D5-33DD96005C56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8C52539B-A252-4323-BE1E-5B217D0B1FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C52539B-A252-4323-BE1E-5B217D0B1FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C52539B-A252-4323-BE1E-5B217D0B1FDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E7B024C-E1D0-4902-B1D5-33DD96005C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E7B024C-E1D0-4902-B1D5-33DD96005C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E7B024C-E1D0-4902-B1D5-33DD96005C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E7B024C-E1D0-4902-B1D5-33DD96005C56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

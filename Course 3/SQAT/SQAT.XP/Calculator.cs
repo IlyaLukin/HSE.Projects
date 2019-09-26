@@ -1,4 +1,7 @@
-﻿namespace SQAT.XP
+﻿using System;
+using System.Collections.Generic;
+
+namespace SQAT.XP
 {
     /// <summary>
     /// Class for calculation functions
@@ -13,9 +16,9 @@
     public class Calculator
     {
         // Last inserted value
-        private double        _currentValue = 0;
+        private readonly List<double> _insertedValues = new List<double>();
         // Current operation
-        private string        _operation    = "=";
+        private readonly List<string> _operations = new List<string>();
 
         /// <summary>
         /// Displayed value
@@ -28,7 +31,7 @@
         /// <param name="value">Inserted value</param>
         public void PressDisplay(double value)
         {
-            _currentValue = value;
+            _insertedValues.Add(value);
         }
 
         #region Calculation functions
@@ -36,9 +39,8 @@
         /// <summary>
         /// a + b
         /// </summary>
-        public void PressPlus()
-        {
-
+        public void PressPlus() {
+            _operations.Add("+");
         }
 
         /// <summary>
@@ -46,7 +48,7 @@
         /// </summary>
         public void PressMinus()
         {
-
+            _operations.Add("-");
         }
 
         /// <summary>
@@ -54,7 +56,7 @@
         /// </summary>
         public void PressMultiply()
         {
-
+            _operations.Add("*");
         }
 
         /// <summary>
@@ -62,7 +64,7 @@
         /// </summary>
         public void PressDivide()
         {
-
+            _operations.Add("/");
         }
 
         #endregion
@@ -72,18 +74,58 @@
         /// <summary>
         /// Calculate
         /// </summary>
-        public void PressEnter()
-        {
+        public void PressEnter() {
             Calculate();
-            _operation = "=";
         }
 
         /// <summary>
         /// Identify type of the operation
         /// </summary>
-        private static void Calculate()
-        {
+        private void Calculate() {
+            var i = 0;
+            var tryFindMd = true;
+            while (true) {
+                tryFindMd &= i != _operations.Count;
+                if (i == _operations.Count) {
+                    i = 0;
+                }
 
+                if (_insertedValues.Count == 1) {
+                    Display = _insertedValues[0];
+                    _insertedValues.Clear();
+                    return;
+                }
+
+                switch (_operations[i]) {
+                    case "*":
+                        _insertedValues[i] *= _insertedValues[i + 1];
+                        _insertedValues.RemoveAt(i +1);
+                        _operations.RemoveAt(i);
+                        continue;
+                    case "/":
+                        if (_insertedValues[i + 1].Equals(0)) throw new DivideByZeroException();
+                        _insertedValues[i] /= _insertedValues[i + 1];
+                        _insertedValues.RemoveAt(i + 1);
+                        _operations.RemoveAt(i);
+                        continue;
+                    case "+":
+                        if (tryFindMd) break;
+                        _insertedValues[i] += _insertedValues[i + 1];
+                        _insertedValues.RemoveAt(i + 1);
+                        _operations.RemoveAt(i);
+                        continue;
+                    case "-":
+                        if (tryFindMd) break;
+                        _insertedValues[i] -= _insertedValues[i + 1];
+                        _insertedValues.RemoveAt(i + 1);
+                        _operations.RemoveAt(i);
+                        continue;
+                    default:
+                        continue;
+                }
+
+                i += 1;
+            }
         }
 
         #endregion

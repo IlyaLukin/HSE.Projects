@@ -53,14 +53,23 @@
     <Compile Include="UnitTesting_1\BeatQueenTests.cs" />
     <Compile Include="UnitTesting_1\DeleteEverySecondTasks.cs" />
     <Compile Include="UnitTesting_1\QuadraticSolutionTests.cs" />
+    <Compile Include="XP\XP.Calculator.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DLLibs\DLLibs.csproj">
+      <Project>{cec29959-5730-43a2-948d-89b7618905bc}</Project>
+      <Name>DLLibs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SQAT.UnitTesting\SQAT.UnitTesting.csproj">
       <Project>{A386000A-A483-4999-8E2F-2E324BA61726}</Project>
       <Name>SQAT.UnitTesting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQAT.XP\SQAT.XP.csproj">
+      <Project>{5E7B024C-E1D0-4902-B1D5-33DD96005C56}</Project>
+      <Name>SQAT.XP</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
