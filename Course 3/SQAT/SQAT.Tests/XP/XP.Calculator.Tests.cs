@@ -691,7 +691,7 @@ namespace SQAT.Tests.XP
             // Act.
             var calculator = new Calculator();
             calculator.PressDisplay(a);
-            calculator.PressPlus();
+            calculator.PressMultiply();
             calculator.PressDisplay(b);
             calculator.PressMinus();
             calculator.PressDisplay(c);
