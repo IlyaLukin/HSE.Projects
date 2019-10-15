@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Net.Configuration;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using DLLibs.Vectors;
 
 namespace DLLibs
@@ -16,36 +9,58 @@ namespace DLLibs
     {
         False,
         Center,
-        StartPoint, 
+        StartPoint,
         EndPoint
     }
 
     public class Imager
     {
-        public Bitmap Canvas;
+        private readonly Pen      _drawPen = new Pen(Color.Black, 3);
         private readonly Graphics _graphics;
-        private readonly Pen _drawPen = new Pen(Color.Black, 3);
-        private readonly Pen _rabberPen = new Pen(Color.Snow, 3)
-                                    {
-                                        StartCap = LineCap.RoundAnchor,
-                                        EndCap = LineCap.RoundAnchor
-                                    };
-        private readonly VectorList _vectors;
-        private int _selectedVector;
 
-        private VectorsEditing _editingVectorType;
+        private readonly Pen _rabberPen = new Pen(Color.Snow, 3)
+                                              {
+                                                  StartCap = LineCap.RoundAnchor,
+                                                  EndCap   = LineCap.RoundAnchor
+                                              };
+
+        private readonly VectorList _vectors;
+
+        private int    _selectedVector;
+        public  Bitmap Canvas;
+
+        #region Public Functions
+
+        public void FullRefresh() {
+            _graphics.Clear(Color.Snow);
+            for (var i = 0;
+                 i < _vectors.Count;
+                 i++) {
+                if (_vectors[i].IsSelected) {
+                    _drawPen.EndCap   = LineCap.RoundAnchor;
+                    _drawPen.StartCap = LineCap.RoundAnchor;
+                }
+
+                _graphics.DrawLine(_drawPen, _vectors[i].StartPoint, _vectors[i].EndPoint);
+                _drawPen.EndCap   = LineCap.NoAnchor;
+                _drawPen.StartCap = LineCap.NoAnchor;
+            }
+        }
+
+        #endregion
 
         #region Methods
 
-        public VectorsEditing GetEditingType => _editingVectorType;
+        public VectorsEditing GetEditingType { get; private set; }
+
         public Dictionary<string, string> GetGeneralInfo {
             get {
-                Dictionary<string, string> generalInfo = new Dictionary<string, string>
-                                                             {
-                                                                 {
-                                                                     "VectorsCount", _vectors.Count.ToString()
-                                                                 }
-                                                             };
+                var generalInfo = new Dictionary<string, string>
+                                      {
+                                          {
+                                              "VectorsCount", _vectors.Count.ToString()
+                                          }
+                                      };
                 return generalInfo;
             }
         }
@@ -54,38 +69,18 @@ namespace DLLibs
 
         #region Init
 
-        public Imager(int width, int height)
-        {
-            Canvas        = new Bitmap(width, height);
-            _graphics = Graphics.FromImage(Canvas);
+        public Imager(int width, int height) {
+            Canvas          = new Bitmap(width, height);
+            _graphics       = Graphics.FromImage(Canvas);
             _selectedVector = -1;
-            _vectors         = new VectorList(width, height);
+            _vectors        = new VectorList(width, height);
         }
 
         public Imager(int width, int height, int selectedVectors) {
-            Canvas = new Bitmap(width, height);
-            _graphics = Graphics.FromImage(Canvas);
+            Canvas          = new Bitmap(width, height);
+            _graphics       = Graphics.FromImage(Canvas);
             _selectedVector = selectedVectors;
-            _vectors = new VectorList(width, height);
-        }
-
-        #endregion
-
-        #region Public Functions
-
-        public void FullRefresh() {
-            _graphics.Clear(Color.Snow);
-            for (int i = 0;
-                 i < _vectors.Count;
-                 i++) {
-                if (_vectors[i].IsSelected) {
-                    _drawPen.EndCap = LineCap.RoundAnchor;
-                    _drawPen.StartCap = LineCap.RoundAnchor;
-                }
-                _graphics.DrawLine(_drawPen, _vectors[i].StartPoint, _vectors[i].EndPoint);
-                _drawPen.EndCap = LineCap.NoAnchor;
-                _drawPen.StartCap = LineCap.NoAnchor;
-            }
+            _vectors        = new VectorList(width, height);
         }
 
         #endregion
@@ -94,7 +89,7 @@ namespace DLLibs
 
         public void EditVector(Point newPoint) {
             _graphics.DrawLine(_rabberPen, _vectors[_selectedVector].StartPoint, _vectors[_selectedVector].EndPoint);
-            switch (_editingVectorType) {
+            switch (GetEditingType) {
                 case VectorsEditing.Center: {
                     _vectors.EditVector(_selectedVector, newPoint, VectorsEditing.Center);
                     break;
@@ -110,6 +105,7 @@ namespace DLLibs
                     break;
                 }
             }
+
             _graphics.DrawLine(_drawPen, _vectors[_selectedVector].StartPoint, _vectors[_selectedVector].EndPoint);
         }
 
@@ -124,7 +120,7 @@ namespace DLLibs
         }
 
         public bool RemoveVector() {
-            var deletedVector = _vectors[_selectedVector];
+            var deletedVector   = _vectors[_selectedVector];
             var isVectorDeleted = _vectors.Delete(_selectedVector);
             if (!isVectorDeleted) return false;
 
@@ -135,9 +131,8 @@ namespace DLLibs
 
         public bool FindVector(Point clickedPoint) {
             var newSelectedVector = _vectors.FindFirst(clickedPoint);
-            _editingVectorType = newSelectedVector.Item2;
-            if (_selectedVector != -1)
-            {
+            GetEditingType = newSelectedVector.Item2;
+            if (_selectedVector != -1) {
                 var prevVector = _vectors[_selectedVector];
                 _vectors[_selectedVector].IsSelected = false;
                 _graphics.DrawLine(_rabberPen, prevVector.StartPoint, prevVector.EndPoint);
@@ -154,10 +149,10 @@ namespace DLLibs
 
             var selectedVector = _vectors[_selectedVector];
             _drawPen.StartCap = LineCap.RoundAnchor;
-            _drawPen.EndCap = LineCap.RoundAnchor;
+            _drawPen.EndCap   = LineCap.RoundAnchor;
             _graphics.DrawLine(_drawPen, selectedVector.StartPoint, selectedVector.EndPoint);
-            _drawPen.StartCap = LineCap.NoAnchor;
-            _drawPen.EndCap = LineCap.NoAnchor;
+            _drawPen.StartCap                    = LineCap.NoAnchor;
+            _drawPen.EndCap                      = LineCap.NoAnchor;
             _vectors[_selectedVector].IsSelected = true;
 
             return true;

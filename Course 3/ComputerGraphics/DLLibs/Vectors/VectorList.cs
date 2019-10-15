@@ -1,37 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DLLibs.Vectors
 {
     internal class VectorList
     {
+        private readonly int          _maxHeight;
+        private readonly int          _maxWidth;
         private readonly List<Vector> _vectors;
-        private readonly int _maxHeight;
-        private readonly int _maxWidth;
-
-        #region Methods
-
-        public int Count => _vectors.Count;
-        public Vector this[int index] {
-            get => _vectors[index];
-            set => _vectors[index] = value;
-        }
-
-        #endregion
 
         #region Init
 
         public VectorList(int width, int height) {
-            _vectors = new List<Vector>();
+            _vectors   = new List<Vector>();
             _maxHeight = height;
-            _maxWidth = width;
+            _maxWidth  = width;
+        }
+
+        #endregion
+
+        #region Methods
+
+        public int Count => _vectors.Count;
+
+        public Vector this[int index] {
+            get => _vectors[index];
+            set => _vectors[index] = value;
         }
 
         #endregion
@@ -54,9 +49,9 @@ namespace DLLibs.Vectors
         }
 
         public Tuple<int, VectorsEditing> FindFirst(Point point) {
-            var minEpsilon = double.MaxValue;
-            var index = -1;
-            VectorsEditing editingType = VectorsEditing.False;
+            var minEpsilon  = double.MaxValue;
+            var index       = -1;
+            var editingType = VectorsEditing.False;
             for (var i = 0;
                  i < _vectors.Count;
                  i++) {
@@ -84,6 +79,7 @@ namespace DLLibs.Vectors
                     _vectors[index].StartPoint = point;
                     return true;
                 }
+
                 case VectorsEditing.EndPoint: {
                     _vectors[index].EndPoint = point;
                     return true;
@@ -91,12 +87,11 @@ namespace DLLibs.Vectors
 
                 case VectorsEditing.Center: {
                     var prevStartPoint = _vectors[index].StartPoint;
-                    var prevEndPoint = _vectors[index].EndPoint;
+                    var prevEndPoint   = _vectors[index].EndPoint;
                     _vectors[index].StartPoint = new Point(prevStartPoint.X + point.X, prevStartPoint.Y + point.Y);
-                    _vectors[index].EndPoint = new Point(prevEndPoint.X + point.X, prevEndPoint.Y + point.Y);
+                    _vectors[index].EndPoint   = new Point(prevEndPoint.X   + point.X, prevEndPoint.Y   + point.Y);
                     break;
                 }
-                default: break;
             }
 
             return false;
@@ -109,9 +104,9 @@ namespace DLLibs.Vectors
         private bool CreateVectorRandom() {
             try {
                 var rnd        = new Random();
-                var  startPoint = new Point(rnd.Next(15, _maxWidth-15), rnd.Next(15, _maxHeight-15));
-                var  endPoint   = new Point(rnd.Next(15, _maxWidth-15), rnd.Next(15, _maxHeight-15));
-                var    newVector  = new Vector(startPoint, endPoint);
+                var startPoint = new Point(rnd.Next(15, _maxWidth - 15), rnd.Next(15, _maxHeight - 15));
+                var endPoint   = new Point(rnd.Next(15, _maxWidth - 15), rnd.Next(15, _maxHeight - 15));
+                var newVector  = new Vector(startPoint, endPoint);
                 _vectors.Add(newVector);
                 return true;
             } catch {

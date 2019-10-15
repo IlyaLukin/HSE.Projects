@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using DLLibs;
 
@@ -13,10 +7,10 @@ namespace VectorRedactor.UI
 {
     public partial class MainWindowForm : Form
     {
-        private bool _isMouseMove;
-        private bool _isVectorEdited;
-        private Point _startPoint;
         private Imager _image;
+        private bool   _isMouseMove;
+        private bool   _isVectorEdited;
+        private Point  _startPoint;
 
         #region Private Functions
 
@@ -35,14 +29,10 @@ namespace VectorRedactor.UI
 
         #region Init
 
-        public MainWindowForm()
-        {
-            InitializeComponent();
-        }
+        public MainWindowForm() { InitializeComponent(); }
 
         private void HandleLoadMainWindow(object sender, EventArgs e) {
-
-            _image = new Imager(Canvas.Width, Canvas.Height);
+            _image       = new Imager(Canvas.Width, Canvas.Height);
             Canvas.Image = _image.Canvas;
             UpdateCanvas();
         }
@@ -74,11 +64,10 @@ namespace VectorRedactor.UI
             Canvas.Refresh();
 
             _isMouseMove = true;
-            _startPoint = e.Location;
+            _startPoint  = e.Location;
         }
 
-        private void HandleMouseMove(object sender, MouseEventArgs e)
-        {
+        private void HandleMouseMove(object sender, MouseEventArgs e) {
             if (e.Button != MouseButtons.Left) _isMouseMove = false;
 
             if (!_isMouseMove ||
@@ -89,6 +78,7 @@ namespace VectorRedactor.UI
                 location    = new Point(e.X - _startPoint.X, e.Y - _startPoint.Y);
                 _startPoint = e.Location;
             }
+
             _image.EditVector(location);
             UpdateCanvas();
         }
